@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_wifi_sample/native/api_generated.dart';
 
 class WifiView extends StatefulWidget {
   @override
@@ -36,12 +37,12 @@ class _WifiViewState extends State<WifiView> {
   }
 
   Future<void> fetchData() async {
-    try {
-      final int result = await _platform.invokeMethod('getBatteryLevel');
-      _batteryLevel = 'Battery level at $result % .';
-    } on PlatformException catch (e) {
-      _batteryLevel = "Failed to get battery level: '${e.message}'.";
-    }
-    setState(() {});
+    final api = Api();
+    final req = Request()..unit = "ぱーせんと";
+    final response = await api.add(req);
+
+    setState(() {
+      _batteryLevel = response.responseMessage;
+    });
   }
 }
