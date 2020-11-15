@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_wifi_sample/native.dart';
 
 void main() {
   runApp(MyApp());
@@ -38,11 +39,7 @@ class _MyHomePageState extends State<MyHomePage> {
         body: Center(
             child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'Hello, World',
-            ),
-          ],
+          children: <Widget>[WifiView()],
         )));
   }
 }
