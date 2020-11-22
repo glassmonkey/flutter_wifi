@@ -9,7 +9,7 @@ import Flutter
 
         let controller: FlutterViewController = window?.rootViewController as! FlutterViewController
 
-        FLTApiSetup(controller.binaryMessenger, ButteryApi())
+        FlutterButteryApiSetup(controller.binaryMessenger, ButteryApi())
 
         GeneratedPluginRegistrant.register(with: self)
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
@@ -17,9 +17,9 @@ import Flutter
 }
 
 
-class ButteryApi: FLTApi {
-    func add(_ input: FLTRequest, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> FLTResponse? {
-        let response = FLTResponse()
+class ButteryApi: FlutterButteryApi {
+    func add(_ input: FlutterButteryRequest, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> FlutterButteryResponse? {
+        let response = FlutterButteryResponse()
         let result = self.receiveBatteryLevel(unit: input.unit ?? "")
         response.responseMessage = result
         return response

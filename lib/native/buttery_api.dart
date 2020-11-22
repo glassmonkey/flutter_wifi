@@ -6,7 +6,7 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 import 'dart:typed_data' show Uint8List, Int32List, Int64List, Float64List;
 
-class Response {
+class ButteryResponse {
   String responseMessage;
   // ignore: unused_element
   Map<dynamic, dynamic> _toMap() {
@@ -15,14 +15,14 @@ class Response {
     return pigeonMap;
   }
   // ignore: unused_element
-  static Response _fromMap(Map<dynamic, dynamic> pigeonMap) {
-    final Response result = Response();
+  static ButteryResponse _fromMap(Map<dynamic, dynamic> pigeonMap) {
+    final ButteryResponse result = ButteryResponse();
     result.responseMessage = pigeonMap['responseMessage'];
     return result;
   }
 }
 
-class Request {
+class ButteryRequest {
   String unit;
   // ignore: unused_element
   Map<dynamic, dynamic> _toMap() {
@@ -31,18 +31,18 @@ class Request {
     return pigeonMap;
   }
   // ignore: unused_element
-  static Request _fromMap(Map<dynamic, dynamic> pigeonMap) {
-    final Request result = Request();
+  static ButteryRequest _fromMap(Map<dynamic, dynamic> pigeonMap) {
+    final ButteryRequest result = ButteryRequest();
     result.unit = pigeonMap['unit'];
     return result;
   }
 }
 
-class Api {
-  Future<Response> add(Request arg) async {
+class ButteryApi {
+  Future<ButteryResponse> add(ButteryRequest arg) async {
     final Map<dynamic, dynamic> requestMap = arg._toMap();
     const BasicMessageChannel<dynamic> channel =
-        BasicMessageChannel<dynamic>('dev.flutter.pigeon.Api.add', StandardMessageCodec());
+        BasicMessageChannel<dynamic>('dev.flutter.pigeon.ButteryApi.add', StandardMessageCodec());
     
     final Map<dynamic, dynamic> replyMap = await channel.send(requestMap);
     if (replyMap == null) {
@@ -57,7 +57,7 @@ class Api {
           message: error['message'],
           details: error['details']);
     } else {
-      return Response._fromMap(replyMap['result']);
+      return ButteryResponse._fromMap(replyMap['result']);
     }
     
   }

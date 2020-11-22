@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_wifi_sample/native/api_generated.dart';
+import 'package:flutter_wifi_sample/native/buttery_api.dart';
 
 class WifiView extends StatefulWidget {
   @override
@@ -37,8 +37,8 @@ class _WifiViewState extends State<WifiView> {
   }
 
   Future<void> fetchData() async {
-    final api = Api();
-    final req = Request()..unit = "ぱーせんと";
+    final api = ButteryApi();
+    final req = ButteryRequest()..unit = "ぱーせんと";
     final response = await api.add(req);
 
     setState(() {

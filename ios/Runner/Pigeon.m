@@ -22,18 +22,18 @@ static NSDictionary* wrapResult(NSDictionary *result, FlutterError *error) {
       nil];
 }
 
-@interface FLTResponse ()
-+(FLTResponse*)fromMap:(NSDictionary*)dict;
+@interface FlutterButteryResponse ()
++(FlutterButteryResponse*)fromMap:(NSDictionary*)dict;
 -(NSDictionary*)toMap;
 @end
-@interface FLTRequest ()
-+(FLTRequest*)fromMap:(NSDictionary*)dict;
+@interface FlutterButteryRequest ()
++(FlutterButteryRequest*)fromMap:(NSDictionary*)dict;
 -(NSDictionary*)toMap;
 @end
 
-@implementation FLTResponse
-+(FLTResponse*)fromMap:(NSDictionary*)dict {
-  FLTResponse* result = [[FLTResponse alloc] init];
+@implementation FlutterButteryResponse
++(FlutterButteryResponse*)fromMap:(NSDictionary*)dict {
+  FlutterButteryResponse* result = [[FlutterButteryResponse alloc] init];
   result.responseMessage = dict[@"responseMessage"];
   if ((NSNull *)result.responseMessage == [NSNull null]) {
     result.responseMessage = nil;
@@ -45,9 +45,9 @@ static NSDictionary* wrapResult(NSDictionary *result, FlutterError *error) {
 }
 @end
 
-@implementation FLTRequest
-+(FLTRequest*)fromMap:(NSDictionary*)dict {
-  FLTRequest* result = [[FLTRequest alloc] init];
+@implementation FlutterButteryRequest
++(FlutterButteryRequest*)fromMap:(NSDictionary*)dict {
+  FlutterButteryRequest* result = [[FlutterButteryRequest alloc] init];
   result.unit = dict[@"unit"];
   if ((NSNull *)result.unit == [NSNull null]) {
     result.unit = nil;
@@ -59,17 +59,17 @@ static NSDictionary* wrapResult(NSDictionary *result, FlutterError *error) {
 }
 @end
 
-void FLTApiSetup(id<FlutterBinaryMessenger> binaryMessenger, id<FLTApi> api) {
+void FlutterButteryApiSetup(id<FlutterBinaryMessenger> binaryMessenger, id<FlutterButteryApi> api) {
   {
     FlutterBasicMessageChannel *channel =
       [FlutterBasicMessageChannel
-        messageChannelWithName:@"dev.flutter.pigeon.Api.add"
+        messageChannelWithName:@"dev.flutter.pigeon.ButteryApi.add"
         binaryMessenger:binaryMessenger];
     if (api) {
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
         FlutterError *error;
-        FLTRequest *input = [FLTRequest fromMap:message];
-        FLTResponse *output = [api add:input error:&error];
+        FlutterButteryRequest *input = [FlutterButteryRequest fromMap:message];
+        FlutterButteryResponse *output = [api add:input error:&error];
         callback(wrapResult([output toMap], error));
       }];
     }

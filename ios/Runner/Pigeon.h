@@ -7,21 +7,21 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class FLTResponse;
-@class FLTRequest;
+@class FlutterButteryResponse;
+@class FlutterButteryRequest;
 
-@interface FLTResponse : NSObject
+@interface FlutterButteryResponse : NSObject
 @property(nonatomic, copy, nullable) NSString * responseMessage;
 @end
 
-@interface FLTRequest : NSObject
+@interface FlutterButteryRequest : NSObject
 @property(nonatomic, copy, nullable) NSString * unit;
 @end
 
-@protocol FLTApi
--(nullable FLTResponse *)add:(FLTRequest*)input error:(FlutterError *_Nullable *_Nonnull)error;
+@protocol FlutterButteryApi
+-(nullable FlutterButteryResponse *)add:(FlutterButteryRequest*)input error:(FlutterError *_Nullable *_Nonnull)error;
 @end
 
-extern void FLTApiSetup(id<FlutterBinaryMessenger> binaryMessenger, id<FLTApi> _Nullable api);
+extern void FlutterButteryApiSetup(id<FlutterBinaryMessenger> binaryMessenger, id<FlutterButteryApi> _Nullable api);
 
 NS_ASSUME_NONNULL_END

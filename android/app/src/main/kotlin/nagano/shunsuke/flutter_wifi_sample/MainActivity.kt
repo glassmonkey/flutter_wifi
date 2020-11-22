@@ -4,6 +4,7 @@ package nagano.shunsuke.flutter_wifi_sample
 import androidx.annotation.NonNull
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
+import nagano.shunsuke.plugins.Buttery
 
 import android.content.Context
 import android.content.ContextWrapper
@@ -12,20 +13,18 @@ import android.content.IntentFilter
 import android.os.BatteryManager
 import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
-import io.flutter.plugins.Pigeon
 
 
 class MainActivity : FlutterActivity() {
-    private val CHANNEL = "nagano.shunsuke.flutter_wifi_sample/battery"
 
-    private class ButteryApi(_batteryManager: BatteryManager, context: Context) : Pigeon.Api {
+    private class ButteryApi(_batteryManager: BatteryManager, context: Context) : Buttery.ButteryApi {
 
         val batteryManager: BatteryManager = _batteryManager
 
         val context = context
 
-        override fun add(req: Pigeon.Request): Pigeon.Response {
-            val response = Pigeon.Response()
+        override fun add(req: Buttery.ButteryRequest): Buttery.ButteryResponse {
+            val response = Buttery.ButteryResponse()
 
             val batteryLevel = getBatteryLevel()
             if (batteryLevel == -1) {
@@ -53,7 +52,7 @@ class MainActivity : FlutterActivity() {
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
         val batteryManager = getSystemService(Context.BATTERY_SERVICE) as BatteryManager
-        Pigeon.Api.setup(flutterEngine.dartExecutor.binaryMessenger, ButteryApi(batteryManager, applicationContext))
+        Buttery.ButteryApi.setup(flutterEngine.dartExecutor.binaryMessenger, ButteryApi(batteryManager, applicationContext))
     }
 
 
