@@ -9,6 +9,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class FlutterButteryResponse;
 @class FlutterButteryRequest;
+@class FlutterWifiResponse;
+@class FlutterWifiRequest;
 
 @interface FlutterButteryResponse : NSObject
 @property(nonatomic, copy, nullable) NSString * responseMessage;
@@ -18,10 +20,24 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, copy, nullable) NSString * unit;
 @end
 
+@interface FlutterWifiResponse : NSObject
+@property(nonatomic, copy, nullable) NSString * responseMessage;
+@end
+
+@interface FlutterWifiRequest : NSObject
+@property(nonatomic, copy, nullable) NSString * unit;
+@end
+
 @protocol FlutterButteryApi
 -(nullable FlutterButteryResponse *)add:(FlutterButteryRequest*)input error:(FlutterError *_Nullable *_Nonnull)error;
 @end
 
 extern void FlutterButteryApiSetup(id<FlutterBinaryMessenger> binaryMessenger, id<FlutterButteryApi> _Nullable api);
+
+@protocol FlutterWifiApi
+-(nullable FlutterWifiResponse *)call:(FlutterWifiRequest*)input error:(FlutterError *_Nullable *_Nonnull)error;
+@end
+
+extern void FlutterWifiApiSetup(id<FlutterBinaryMessenger> binaryMessenger, id<FlutterWifiApi> _Nullable api);
 
 NS_ASSUME_NONNULL_END

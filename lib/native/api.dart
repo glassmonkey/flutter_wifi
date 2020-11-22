@@ -38,6 +38,38 @@ class ButteryRequest {
   }
 }
 
+class WifiResponse {
+  String responseMessage;
+  // ignore: unused_element
+  Map<dynamic, dynamic> _toMap() {
+    final Map<dynamic, dynamic> pigeonMap = <dynamic, dynamic>{};
+    pigeonMap['responseMessage'] = responseMessage;
+    return pigeonMap;
+  }
+  // ignore: unused_element
+  static WifiResponse _fromMap(Map<dynamic, dynamic> pigeonMap) {
+    final WifiResponse result = WifiResponse();
+    result.responseMessage = pigeonMap['responseMessage'];
+    return result;
+  }
+}
+
+class WifiRequest {
+  String unit;
+  // ignore: unused_element
+  Map<dynamic, dynamic> _toMap() {
+    final Map<dynamic, dynamic> pigeonMap = <dynamic, dynamic>{};
+    pigeonMap['unit'] = unit;
+    return pigeonMap;
+  }
+  // ignore: unused_element
+  static WifiRequest _fromMap(Map<dynamic, dynamic> pigeonMap) {
+    final WifiRequest result = WifiRequest();
+    result.unit = pigeonMap['unit'];
+    return result;
+  }
+}
+
 class ButteryApi {
   Future<ButteryResponse> add(ButteryRequest arg) async {
     final Map<dynamic, dynamic> requestMap = arg._toMap();
@@ -58,6 +90,31 @@ class ButteryApi {
           details: error['details']);
     } else {
       return ButteryResponse._fromMap(replyMap['result']);
+    }
+    
+  }
+}
+
+class WifiApi {
+  Future<WifiResponse> call(WifiRequest arg) async {
+    final Map<dynamic, dynamic> requestMap = arg._toMap();
+    const BasicMessageChannel<dynamic> channel =
+        BasicMessageChannel<dynamic>('dev.flutter.pigeon.WifiApi.call', StandardMessageCodec());
+    
+    final Map<dynamic, dynamic> replyMap = await channel.send(requestMap);
+    if (replyMap == null) {
+      throw PlatformException(
+        code: 'channel-error',
+        message: 'Unable to establish connection on channel.',
+        details: null);
+    } else if (replyMap['error'] != null) {
+      final Map<dynamic, dynamic> error = replyMap['error'];
+      throw PlatformException(
+          code: error['code'],
+          message: error['message'],
+          details: error['details']);
+    } else {
+      return WifiResponse._fromMap(replyMap['result']);
     }
     
   }

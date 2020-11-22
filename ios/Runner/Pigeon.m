@@ -30,6 +30,14 @@ static NSDictionary* wrapResult(NSDictionary *result, FlutterError *error) {
 +(FlutterButteryRequest*)fromMap:(NSDictionary*)dict;
 -(NSDictionary*)toMap;
 @end
+@interface FlutterWifiResponse ()
++(FlutterWifiResponse*)fromMap:(NSDictionary*)dict;
+-(NSDictionary*)toMap;
+@end
+@interface FlutterWifiRequest ()
++(FlutterWifiRequest*)fromMap:(NSDictionary*)dict;
+-(NSDictionary*)toMap;
+@end
 
 @implementation FlutterButteryResponse
 +(FlutterButteryResponse*)fromMap:(NSDictionary*)dict {
@@ -59,6 +67,34 @@ static NSDictionary* wrapResult(NSDictionary *result, FlutterError *error) {
 }
 @end
 
+@implementation FlutterWifiResponse
++(FlutterWifiResponse*)fromMap:(NSDictionary*)dict {
+  FlutterWifiResponse* result = [[FlutterWifiResponse alloc] init];
+  result.responseMessage = dict[@"responseMessage"];
+  if ((NSNull *)result.responseMessage == [NSNull null]) {
+    result.responseMessage = nil;
+  }
+  return result;
+}
+-(NSDictionary*)toMap {
+  return [NSDictionary dictionaryWithObjectsAndKeys:(self.responseMessage ? self.responseMessage : [NSNull null]), @"responseMessage", nil];
+}
+@end
+
+@implementation FlutterWifiRequest
++(FlutterWifiRequest*)fromMap:(NSDictionary*)dict {
+  FlutterWifiRequest* result = [[FlutterWifiRequest alloc] init];
+  result.unit = dict[@"unit"];
+  if ((NSNull *)result.unit == [NSNull null]) {
+    result.unit = nil;
+  }
+  return result;
+}
+-(NSDictionary*)toMap {
+  return [NSDictionary dictionaryWithObjectsAndKeys:(self.unit ? self.unit : [NSNull null]), @"unit", nil];
+}
+@end
+
 void FlutterButteryApiSetup(id<FlutterBinaryMessenger> binaryMessenger, id<FlutterButteryApi> api) {
   {
     FlutterBasicMessageChannel *channel =
@@ -70,6 +106,25 @@ void FlutterButteryApiSetup(id<FlutterBinaryMessenger> binaryMessenger, id<Flutt
         FlutterError *error;
         FlutterButteryRequest *input = [FlutterButteryRequest fromMap:message];
         FlutterButteryResponse *output = [api add:input error:&error];
+        callback(wrapResult([output toMap], error));
+      }];
+    }
+    else {
+      [channel setMessageHandler:nil];
+    }
+  }
+}
+void FlutterWifiApiSetup(id<FlutterBinaryMessenger> binaryMessenger, id<FlutterWifiApi> api) {
+  {
+    FlutterBasicMessageChannel *channel =
+      [FlutterBasicMessageChannel
+        messageChannelWithName:@"dev.flutter.pigeon.WifiApi.call"
+        binaryMessenger:binaryMessenger];
+    if (api) {
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        FlutterError *error;
+        FlutterWifiRequest *input = [FlutterWifiRequest fromMap:message];
+        FlutterWifiResponse *output = [api call:input error:&error];
         callback(wrapResult([output toMap], error));
       }];
     }
