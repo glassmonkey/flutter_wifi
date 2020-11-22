@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_wifi_sample/native/buttery_api.dart';
+import 'package:flutter_wifi_sample/native/api.dart';
 
 class WifiView extends StatefulWidget {
   @override
