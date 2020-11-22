@@ -6,55 +6,42 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 import 'dart:typed_data' show Uint8List, Int32List, Int64List, Float64List;
 
-class ButteryResponse {
-  String responseMessage;
-  // ignore: unused_element
-  Map<dynamic, dynamic> _toMap() {
-    final Map<dynamic, dynamic> pigeonMap = <dynamic, dynamic>{};
-    pigeonMap['responseMessage'] = responseMessage;
-    return pigeonMap;
-  }
-  // ignore: unused_element
-  static ButteryResponse _fromMap(Map<dynamic, dynamic> pigeonMap) {
-    final ButteryResponse result = ButteryResponse();
-    result.responseMessage = pigeonMap['responseMessage'];
-    return result;
-  }
-}
-
-class ButteryRequest {
-  String unit;
-  // ignore: unused_element
-  Map<dynamic, dynamic> _toMap() {
-    final Map<dynamic, dynamic> pigeonMap = <dynamic, dynamic>{};
-    pigeonMap['unit'] = unit;
-    return pigeonMap;
-  }
-  // ignore: unused_element
-  static ButteryRequest _fromMap(Map<dynamic, dynamic> pigeonMap) {
-    final ButteryRequest result = ButteryRequest();
-    result.unit = pigeonMap['unit'];
-    return result;
-  }
-}
-
 class WifiResponse {
-  String responseMessage;
+  bool availableWifi;
+  bool availableMobile;
   // ignore: unused_element
   Map<dynamic, dynamic> _toMap() {
     final Map<dynamic, dynamic> pigeonMap = <dynamic, dynamic>{};
-    pigeonMap['responseMessage'] = responseMessage;
+    pigeonMap['availableWifi'] = availableWifi;
+    pigeonMap['availableMobile'] = availableMobile;
     return pigeonMap;
   }
   // ignore: unused_element
   static WifiResponse _fromMap(Map<dynamic, dynamic> pigeonMap) {
     final WifiResponse result = WifiResponse();
+    result.availableWifi = pigeonMap['availableWifi'];
+    result.availableMobile = pigeonMap['availableMobile'];
+    return result;
+  }
+}
+
+class BatteryResponse {
+  String responseMessage;
+  // ignore: unused_element
+  Map<dynamic, dynamic> _toMap() {
+    final Map<dynamic, dynamic> pigeonMap = <dynamic, dynamic>{};
+    pigeonMap['responseMessage'] = responseMessage;
+    return pigeonMap;
+  }
+  // ignore: unused_element
+  static BatteryResponse _fromMap(Map<dynamic, dynamic> pigeonMap) {
+    final BatteryResponse result = BatteryResponse();
     result.responseMessage = pigeonMap['responseMessage'];
     return result;
   }
 }
 
-class WifiRequest {
+class BatteryRequest {
   String unit;
   // ignore: unused_element
   Map<dynamic, dynamic> _toMap() {
@@ -63,18 +50,38 @@ class WifiRequest {
     return pigeonMap;
   }
   // ignore: unused_element
-  static WifiRequest _fromMap(Map<dynamic, dynamic> pigeonMap) {
-    final WifiRequest result = WifiRequest();
+  static BatteryRequest _fromMap(Map<dynamic, dynamic> pigeonMap) {
+    final BatteryRequest result = BatteryRequest();
     result.unit = pigeonMap['unit'];
     return result;
   }
 }
 
-class ButteryApi {
-  Future<ButteryResponse> add(ButteryRequest arg) async {
+abstract class WifiCallbackApi {
+  void apply(WifiResponse arg);
+  static void setup(WifiCallbackApi api) {
+    {
+      const BasicMessageChannel<dynamic> channel =
+          BasicMessageChannel<dynamic>('dev.flutter.pigeon.WifiCallbackApi.apply', StandardMessageCodec());
+      if (api == null) {
+        channel.setMessageHandler(null);
+      } else {
+
+        channel.setMessageHandler((dynamic message) async {
+          final Map<dynamic, dynamic> mapMessage = message as Map<dynamic, dynamic>;
+          final WifiResponse input = WifiResponse._fromMap(mapMessage);
+          api.apply(input);
+        });
+      }
+    }
+  }
+}
+
+class BatteryApi {
+  Future<BatteryResponse> call(BatteryRequest arg) async {
     final Map<dynamic, dynamic> requestMap = arg._toMap();
     const BasicMessageChannel<dynamic> channel =
-        BasicMessageChannel<dynamic>('dev.flutter.pigeon.ButteryApi.add', StandardMessageCodec());
+        BasicMessageChannel<dynamic>('dev.flutter.pigeon.BatteryApi.call', StandardMessageCodec());
     
     final Map<dynamic, dynamic> replyMap = await channel.send(requestMap);
     if (replyMap == null) {
@@ -89,19 +96,18 @@ class ButteryApi {
           message: error['message'],
           details: error['details']);
     } else {
-      return ButteryResponse._fromMap(replyMap['result']);
+      return BatteryResponse._fromMap(replyMap['result']);
     }
     
   }
 }
 
 class WifiApi {
-  Future<WifiResponse> call(WifiRequest arg) async {
-    final Map<dynamic, dynamic> requestMap = arg._toMap();
+  Future<WifiResponse> call() async {
     const BasicMessageChannel<dynamic> channel =
         BasicMessageChannel<dynamic>('dev.flutter.pigeon.WifiApi.call', StandardMessageCodec());
     
-    final Map<dynamic, dynamic> replyMap = await channel.send(requestMap);
+    final Map<dynamic, dynamic> replyMap = await channel.send(null);
     if (replyMap == null) {
       throw PlatformException(
         code: 'channel-error',

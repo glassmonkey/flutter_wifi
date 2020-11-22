@@ -7,20 +7,18 @@ import io.flutter.embedding.engine.FlutterEngine
 import nagano.shunsuke.plugins.Pigeon
 
 import android.content.Context
+import android.net.ConnectivityManager
 import android.os.BatteryManager
-import android.os.Build
-import androidx.annotation.RequiresApi
 
 
 class MainActivity : FlutterActivity() {
 
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
-        val batteryManager = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            getSystemService(Context.BATTERY_SERVICE) as BatteryManager
-        } else {
-           null
-        }
-        Pigeon.ButteryApi.setup(flutterEngine.dartExecutor.binaryMessenger, ButteryApi(batteryManager, applicationContext))
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val batteryManager = context.getSystemService(Context.BATTERY_SERVICE) as BatteryManager
+
+        Pigeon.BatteryApi.setup(flutterEngine.dartExecutor.binaryMessenger, BatteryApi(batteryManager))
+        Pigeon.WifiApi.setup(flutterEngine.dartExecutor.binaryMessenger,  WifiApi(connectivityManager, flutterEngine.dartExecutor.binaryMessenger))
     }
 }

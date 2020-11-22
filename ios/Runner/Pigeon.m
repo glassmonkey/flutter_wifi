@@ -22,54 +22,40 @@ static NSDictionary* wrapResult(NSDictionary *result, FlutterError *error) {
       nil];
 }
 
-@interface FlutterButteryResponse ()
-+(FlutterButteryResponse*)fromMap:(NSDictionary*)dict;
--(NSDictionary*)toMap;
-@end
-@interface FlutterButteryRequest ()
-+(FlutterButteryRequest*)fromMap:(NSDictionary*)dict;
--(NSDictionary*)toMap;
-@end
 @interface FlutterWifiResponse ()
 +(FlutterWifiResponse*)fromMap:(NSDictionary*)dict;
 -(NSDictionary*)toMap;
 @end
-@interface FlutterWifiRequest ()
-+(FlutterWifiRequest*)fromMap:(NSDictionary*)dict;
+@interface FlutterBatteryResponse ()
++(FlutterBatteryResponse*)fromMap:(NSDictionary*)dict;
 -(NSDictionary*)toMap;
 @end
-
-@implementation FlutterButteryResponse
-+(FlutterButteryResponse*)fromMap:(NSDictionary*)dict {
-  FlutterButteryResponse* result = [[FlutterButteryResponse alloc] init];
-  result.responseMessage = dict[@"responseMessage"];
-  if ((NSNull *)result.responseMessage == [NSNull null]) {
-    result.responseMessage = nil;
-  }
-  return result;
-}
--(NSDictionary*)toMap {
-  return [NSDictionary dictionaryWithObjectsAndKeys:(self.responseMessage ? self.responseMessage : [NSNull null]), @"responseMessage", nil];
-}
-@end
-
-@implementation FlutterButteryRequest
-+(FlutterButteryRequest*)fromMap:(NSDictionary*)dict {
-  FlutterButteryRequest* result = [[FlutterButteryRequest alloc] init];
-  result.unit = dict[@"unit"];
-  if ((NSNull *)result.unit == [NSNull null]) {
-    result.unit = nil;
-  }
-  return result;
-}
--(NSDictionary*)toMap {
-  return [NSDictionary dictionaryWithObjectsAndKeys:(self.unit ? self.unit : [NSNull null]), @"unit", nil];
-}
+@interface FlutterBatteryRequest ()
++(FlutterBatteryRequest*)fromMap:(NSDictionary*)dict;
+-(NSDictionary*)toMap;
 @end
 
 @implementation FlutterWifiResponse
 +(FlutterWifiResponse*)fromMap:(NSDictionary*)dict {
   FlutterWifiResponse* result = [[FlutterWifiResponse alloc] init];
+  result.availableWifi = dict[@"availableWifi"];
+  if ((NSNull *)result.availableWifi == [NSNull null]) {
+    result.availableWifi = nil;
+  }
+  result.availableMobile = dict[@"availableMobile"];
+  if ((NSNull *)result.availableMobile == [NSNull null]) {
+    result.availableMobile = nil;
+  }
+  return result;
+}
+-(NSDictionary*)toMap {
+  return [NSDictionary dictionaryWithObjectsAndKeys:(self.availableWifi ? self.availableWifi : [NSNull null]), @"availableWifi", (self.availableMobile ? self.availableMobile : [NSNull null]), @"availableMobile", nil];
+}
+@end
+
+@implementation FlutterBatteryResponse
++(FlutterBatteryResponse*)fromMap:(NSDictionary*)dict {
+  FlutterBatteryResponse* result = [[FlutterBatteryResponse alloc] init];
   result.responseMessage = dict[@"responseMessage"];
   if ((NSNull *)result.responseMessage == [NSNull null]) {
     result.responseMessage = nil;
@@ -81,9 +67,9 @@ static NSDictionary* wrapResult(NSDictionary *result, FlutterError *error) {
 }
 @end
 
-@implementation FlutterWifiRequest
-+(FlutterWifiRequest*)fromMap:(NSDictionary*)dict {
-  FlutterWifiRequest* result = [[FlutterWifiRequest alloc] init];
+@implementation FlutterBatteryRequest
++(FlutterBatteryRequest*)fromMap:(NSDictionary*)dict {
+  FlutterBatteryRequest* result = [[FlutterBatteryRequest alloc] init];
   result.unit = dict[@"unit"];
   if ((NSNull *)result.unit == [NSNull null]) {
     result.unit = nil;
@@ -95,17 +81,41 @@ static NSDictionary* wrapResult(NSDictionary *result, FlutterError *error) {
 }
 @end
 
-void FlutterButteryApiSetup(id<FlutterBinaryMessenger> binaryMessenger, id<FlutterButteryApi> api) {
+@interface FlutterWifiCallbackApi ()
+@property (nonatomic, strong) NSObject<FlutterBinaryMessenger>* binaryMessenger;
+@end
+
+@implementation FlutterWifiCallbackApi
+- (instancetype)initWithBinaryMessenger:(NSObject<FlutterBinaryMessenger>*)binaryMessenger {
+  self = [super init];
+  if (self) {
+    self.binaryMessenger = binaryMessenger;
+  }
+  return self;
+}
+
+- (void)apply:(FlutterWifiResponse*)input completion:(void(^)(NSError* _Nullable))completion {
+  FlutterBasicMessageChannel *channel =
+    [FlutterBasicMessageChannel
+      messageChannelWithName:@"dev.flutter.pigeon.WifiCallbackApi.apply"
+      binaryMessenger:self.binaryMessenger];
+  NSDictionary* inputMap = [input toMap];
+  [channel sendMessage:inputMap reply:^(id reply) {
+    completion(nil);
+  }];
+}
+@end
+void FlutterBatteryApiSetup(id<FlutterBinaryMessenger> binaryMessenger, id<FlutterBatteryApi> api) {
   {
     FlutterBasicMessageChannel *channel =
       [FlutterBasicMessageChannel
-        messageChannelWithName:@"dev.flutter.pigeon.ButteryApi.add"
+        messageChannelWithName:@"dev.flutter.pigeon.BatteryApi.call"
         binaryMessenger:binaryMessenger];
     if (api) {
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
         FlutterError *error;
-        FlutterButteryRequest *input = [FlutterButteryRequest fromMap:message];
-        FlutterButteryResponse *output = [api add:input error:&error];
+        FlutterBatteryRequest *input = [FlutterBatteryRequest fromMap:message];
+        FlutterBatteryResponse *output = [api call:input error:&error];
         callback(wrapResult([output toMap], error));
       }];
     }
@@ -123,8 +133,7 @@ void FlutterWifiApiSetup(id<FlutterBinaryMessenger> binaryMessenger, id<FlutterW
     if (api) {
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
         FlutterError *error;
-        FlutterWifiRequest *input = [FlutterWifiRequest fromMap:message];
-        FlutterWifiResponse *output = [api call:input error:&error];
+        FlutterWifiResponse *output = [api call:&error];
         callback(wrapResult([output toMap], error));
       }];
     }

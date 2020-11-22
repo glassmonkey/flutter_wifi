@@ -1,33 +1,34 @@
 import 'package:pigeon/pigeon.dart';
 
 // 引数の定義
-class ButteryRequest {
+class BatteryRequest {
   String unit;
 }
 
 // 戻り値の定義
-class ButteryResponse {
+class BatteryResponse {
   String responseMessage;
 }
 
 @HostApi()
-abstract class ButteryApi {
-  ButteryResponse add(ButteryRequest req);
-}
-
-// 引数の定義
-class WifiRequest {
-  String unit;
+abstract class BatteryApi {
+  BatteryResponse call(BatteryRequest req);
 }
 
 // 戻り値の定義
 class WifiResponse {
-  String responseMessage;
+  bool availableWifi;
+  bool availableMobile;
 }
 
 @HostApi()
 abstract class WifiApi {
-  WifiResponse call(WifiRequest req);
+  WifiResponse call();
+}
+
+@FlutterApi()
+abstract class WifiCallbackApi {
+  void apply(WifiResponse response);
 }
 
 // 生成されるファイルの出力先などの設定
