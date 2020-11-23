@@ -5,9 +5,9 @@
 //  Created by 永野峻輔 on 2020/11/22.
 //
 
-class ButteryApi: FlutterButteryApi {
-    func add(_ input: FlutterButteryRequest, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> FlutterButteryResponse? {
-        let response = FlutterButteryResponse()
+class BatteryApi: FlutterBatteryApi {
+    func call(_ input: FlutterBatteryRequest, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> FlutterBatteryResponse? {
+        let response = FlutterBatteryResponse()
         let result = self.receiveBatteryLevel(unit: input.unit ?? "")
         response.responseMessage = result
         return response
