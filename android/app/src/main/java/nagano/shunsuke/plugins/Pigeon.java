@@ -15,6 +15,10 @@ public class Pigeon {
 
   /** Generated class from Pigeon that represents data sent in messages. */
   public static class WifiResponse {
+    private Boolean availableDetect;
+    public Boolean getAvailableDetect() { return availableDetect; }
+    public void setAvailableDetect(Boolean setterArg) { this.availableDetect = setterArg; }
+
     private Boolean availableWifi;
     public Boolean getAvailableWifi() { return availableWifi; }
     public void setAvailableWifi(Boolean setterArg) { this.availableWifi = setterArg; }
@@ -25,12 +29,15 @@ public class Pigeon {
 
     HashMap toMap() {
       HashMap<String, Object> toMapResult = new HashMap<>();
+      toMapResult.put("availableDetect", availableDetect);
       toMapResult.put("availableWifi", availableWifi);
       toMapResult.put("availableMobile", availableMobile);
       return toMapResult;
     }
     static WifiResponse fromMap(HashMap map) {
       WifiResponse fromMapResult = new WifiResponse();
+      Object availableDetect = map.get("availableDetect");
+      fromMapResult.availableDetect = (Boolean)availableDetect;
       Object availableWifi = map.get("availableWifi");
       fromMapResult.availableWifi = (Boolean)availableWifi;
       Object availableMobile = map.get("availableMobile");
@@ -40,47 +47,28 @@ public class Pigeon {
   }
 
   /** Generated class from Pigeon that represents data sent in messages. */
-  public static class BatteryResponse {
-    private String responseMessage;
-    public String getResponseMessage() { return responseMessage; }
-    public void setResponseMessage(String setterArg) { this.responseMessage = setterArg; }
+  public static class WifiRequest {
+    private Boolean isDetect;
+    public Boolean getIsDetect() { return isDetect; }
+    public void setIsDetect(Boolean setterArg) { this.isDetect = setterArg; }
 
     HashMap toMap() {
       HashMap<String, Object> toMapResult = new HashMap<>();
-      toMapResult.put("responseMessage", responseMessage);
+      toMapResult.put("isDetect", isDetect);
       return toMapResult;
     }
-    static BatteryResponse fromMap(HashMap map) {
-      BatteryResponse fromMapResult = new BatteryResponse();
-      Object responseMessage = map.get("responseMessage");
-      fromMapResult.responseMessage = (String)responseMessage;
-      return fromMapResult;
-    }
-  }
-
-  /** Generated class from Pigeon that represents data sent in messages. */
-  public static class BatteryRequest {
-    private String unit;
-    public String getUnit() { return unit; }
-    public void setUnit(String setterArg) { this.unit = setterArg; }
-
-    HashMap toMap() {
-      HashMap<String, Object> toMapResult = new HashMap<>();
-      toMapResult.put("unit", unit);
-      return toMapResult;
-    }
-    static BatteryRequest fromMap(HashMap map) {
-      BatteryRequest fromMapResult = new BatteryRequest();
-      Object unit = map.get("unit");
-      fromMapResult.unit = (String)unit;
+    static WifiRequest fromMap(HashMap map) {
+      WifiRequest fromMapResult = new WifiRequest();
+      Object isDetect = map.get("isDetect");
+      fromMapResult.isDetect = (Boolean)isDetect;
       return fromMapResult;
     }
   }
 
   /** Generated class from Pigeon that represents Flutter messages that can be called from Java.*/
-  public static class WifiCallbackApi {
+  public static class CallbackApi {
     private final BinaryMessenger binaryMessenger;
-    public WifiCallbackApi(BinaryMessenger argBinaryMessenger){
+    public CallbackApi(BinaryMessenger argBinaryMessenger){
       this.binaryMessenger = argBinaryMessenger;
     }
     public interface Reply<T> {
@@ -88,7 +76,7 @@ public class Pigeon {
     }
     public void apply(WifiResponse argInput, Reply<Void> callback) {
       BasicMessageChannel<Object> channel =
-          new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.WifiCallbackApi.apply", new StandardMessageCodec());
+          new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.CallbackApi.apply", new StandardMessageCodec());
       HashMap inputMap = argInput.toMap();
       channel.send(inputMap, channelReply -> {
         callback.reply(null);
@@ -97,49 +85,21 @@ public class Pigeon {
   }
 
   /** Generated interface from Pigeon that represents a handler of messages from Flutter.*/
-  public interface BatteryApi {
-    BatteryResponse call(BatteryRequest arg);
+  public interface Api {
+    WifiResponse call(WifiRequest arg);
 
-    /** Sets up an instance of `BatteryApi` to handle messages through the `binaryMessenger` */
-    static void setup(BinaryMessenger binaryMessenger, BatteryApi api) {
+    /** Sets up an instance of `Api` to handle messages through the `binaryMessenger` */
+    static void setup(BinaryMessenger binaryMessenger, Api api) {
       {
         BasicMessageChannel<Object> channel =
-            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.BatteryApi.call", new StandardMessageCodec());
+            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.Api.call", new StandardMessageCodec());
         if (api != null) {
           channel.setMessageHandler((message, reply) -> {
             HashMap<String, HashMap> wrapped = new HashMap<>();
             try {
               @SuppressWarnings("ConstantConditions")
-              BatteryRequest input = BatteryRequest.fromMap((HashMap)message);
-              BatteryResponse output = api.call(input);
-              wrapped.put("result", output.toMap());
-            }
-            catch (Exception exception) {
-              wrapped.put("error", wrapError(exception));
-            }
-            reply.reply(wrapped);
-          });
-        } else {
-          channel.setMessageHandler(null);
-        }
-      }
-    }
-  }
-
-  /** Generated interface from Pigeon that represents a handler of messages from Flutter.*/
-  public interface WifiApi {
-    WifiResponse call();
-
-    /** Sets up an instance of `WifiApi` to handle messages through the `binaryMessenger` */
-    static void setup(BinaryMessenger binaryMessenger, WifiApi api) {
-      {
-        BasicMessageChannel<Object> channel =
-            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.WifiApi.call", new StandardMessageCodec());
-        if (api != null) {
-          channel.setMessageHandler((message, reply) -> {
-            HashMap<String, HashMap> wrapped = new HashMap<>();
-            try {
-              WifiResponse output = api.call();
+              WifiRequest input = WifiRequest.fromMap((HashMap)message);
+              WifiResponse output = api.call(input);
               wrapped.put("result", output.toMap());
             }
             catch (Exception exception) {

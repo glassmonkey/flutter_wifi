@@ -16,9 +16,6 @@ class MainActivity : FlutterActivity() {
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val batteryManager = context.getSystemService(Context.BATTERY_SERVICE) as BatteryManager
-
-        Pigeon.BatteryApi.setup(flutterEngine.dartExecutor.binaryMessenger, BatteryApi(batteryManager))
-        Pigeon.WifiApi.setup(flutterEngine.dartExecutor.binaryMessenger,  WifiApi(connectivityManager, flutterEngine.dartExecutor.binaryMessenger))
+        Pigeon.Api.setup(flutterEngine.dartExecutor.binaryMessenger,  WifiApi(connectivityManager, flutterEngine.dartExecutor.binaryMessenger))
     }
 }

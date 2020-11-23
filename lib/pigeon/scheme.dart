@@ -1,33 +1,23 @@
 import 'package:pigeon/pigeon.dart';
 
-// 引数の定義
-class BatteryRequest {
-  String unit;
-}
-
-// 戻り値の定義
-class BatteryResponse {
-  String responseMessage;
-}
-
-@HostApi()
-abstract class BatteryApi {
-  BatteryResponse call(BatteryRequest req);
+class WifiRequest {
+  bool isDetect;
 }
 
 // 戻り値の定義
 class WifiResponse {
+  bool availableDetect;
   bool availableWifi;
   bool availableMobile;
 }
 
 @HostApi()
-abstract class WifiApi {
-  WifiResponse call();
+abstract class Api {
+  WifiResponse call(WifiRequest request);
 }
 
 @FlutterApi()
-abstract class WifiCallbackApi {
+abstract class CallbackApi {
   void apply(WifiResponse response);
 }
 

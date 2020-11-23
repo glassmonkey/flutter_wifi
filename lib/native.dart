@@ -12,16 +12,16 @@ class WifiView extends StatefulWidget {
 
 class _WifiViewState extends State<WifiView> {
   String _wifiText;
-  String _butteryText;
+
+  bool _isSwitch;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    this._wifiText = "loading";
-    this._butteryText = "loading";
-    WifiCallbackApi.setup(WifiCallbackApiImpl(this.changeConnection));
-    fetchWifi();
+    _wifiText = "loading";
+    _isSwitch = false;
+    CallbackApi.setup(CallbackApiImpl(this.changeConnection));
   }
 
   @override
@@ -29,47 +29,47 @@ class _WifiViewState extends State<WifiView> {
     // TODO: implement build
     return Column(children: [
       Text(_wifiText),
-      Text(_butteryText),
       RaisedButton(
-        child: Text('Get Buttery Information'),
+        child: Text("Get Wifi Information"),
         onPressed: fetchData,
+        color: _isSwitch ? Colors.green : Colors.black12,
+        textColor: Colors.white,
       ),
     ]);
   }
 
   Future<void> fetchData() async {
-    final api = BatteryApi();
-    final req = BatteryRequest();
-    req.unit = "%";
-    final response = await api.call(req);
-
     setState(() {
-      this._butteryText = response.responseMessage;
+      _isSwitch = !_isSwitch;
     });
-  }
-
-  Future<void> fetchWifi() async {
-    final api = WifiApi();
-    this.changeConnection(await api.call());
+    final api = Api();
+    final request = WifiRequest();
+    request.isDetect = _isSwitch;
+    this.changeConnection(await api.call(request));
   }
 
   void changeConnection(WifiResponse response) {
     setState(() {
+      if (!response.availableDetect) {
+        _wifiText = "Stop Detection";
+        return;
+      }
+
       if (response.availableWifi) {
-        _wifiText = "WIFI";
+        _wifiText = "WIFI Connection";
       } else if (response.availableMobile) {
-        _wifiText = "mobile";
+        _wifiText = "Mobile Connection";
       } else {
-        _wifiText = "lost";
+        _wifiText = "Lost Connection";
       }
     });
   }
 }
 
-class WifiCallbackApiImpl extends WifiCallbackApi {
+class CallbackApiImpl extends CallbackApi {
   final Function(WifiResponse response) caller;
 
-  WifiCallbackApiImpl(this.caller);
+  CallbackApiImpl(this.caller);
 
   @override
   void apply(WifiResponse response) {

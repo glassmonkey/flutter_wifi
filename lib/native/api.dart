@@ -7,11 +7,13 @@ import 'package:flutter/services.dart';
 import 'dart:typed_data' show Uint8List, Int32List, Int64List, Float64List;
 
 class WifiResponse {
+  bool availableDetect;
   bool availableWifi;
   bool availableMobile;
   // ignore: unused_element
   Map<dynamic, dynamic> _toMap() {
     final Map<dynamic, dynamic> pigeonMap = <dynamic, dynamic>{};
+    pigeonMap['availableDetect'] = availableDetect;
     pigeonMap['availableWifi'] = availableWifi;
     pigeonMap['availableMobile'] = availableMobile;
     return pigeonMap;
@@ -19,50 +21,35 @@ class WifiResponse {
   // ignore: unused_element
   static WifiResponse _fromMap(Map<dynamic, dynamic> pigeonMap) {
     final WifiResponse result = WifiResponse();
+    result.availableDetect = pigeonMap['availableDetect'];
     result.availableWifi = pigeonMap['availableWifi'];
     result.availableMobile = pigeonMap['availableMobile'];
     return result;
   }
 }
 
-class BatteryResponse {
-  String responseMessage;
+class WifiRequest {
+  bool isDetect;
   // ignore: unused_element
   Map<dynamic, dynamic> _toMap() {
     final Map<dynamic, dynamic> pigeonMap = <dynamic, dynamic>{};
-    pigeonMap['responseMessage'] = responseMessage;
+    pigeonMap['isDetect'] = isDetect;
     return pigeonMap;
   }
   // ignore: unused_element
-  static BatteryResponse _fromMap(Map<dynamic, dynamic> pigeonMap) {
-    final BatteryResponse result = BatteryResponse();
-    result.responseMessage = pigeonMap['responseMessage'];
+  static WifiRequest _fromMap(Map<dynamic, dynamic> pigeonMap) {
+    final WifiRequest result = WifiRequest();
+    result.isDetect = pigeonMap['isDetect'];
     return result;
   }
 }
 
-class BatteryRequest {
-  String unit;
-  // ignore: unused_element
-  Map<dynamic, dynamic> _toMap() {
-    final Map<dynamic, dynamic> pigeonMap = <dynamic, dynamic>{};
-    pigeonMap['unit'] = unit;
-    return pigeonMap;
-  }
-  // ignore: unused_element
-  static BatteryRequest _fromMap(Map<dynamic, dynamic> pigeonMap) {
-    final BatteryRequest result = BatteryRequest();
-    result.unit = pigeonMap['unit'];
-    return result;
-  }
-}
-
-abstract class WifiCallbackApi {
+abstract class CallbackApi {
   void apply(WifiResponse arg);
-  static void setup(WifiCallbackApi api) {
+  static void setup(CallbackApi api) {
     {
       const BasicMessageChannel<dynamic> channel =
-          BasicMessageChannel<dynamic>('dev.flutter.pigeon.WifiCallbackApi.apply', StandardMessageCodec());
+          BasicMessageChannel<dynamic>('dev.flutter.pigeon.CallbackApi.apply', StandardMessageCodec());
       if (api == null) {
         channel.setMessageHandler(null);
       } else {
@@ -77,37 +64,13 @@ abstract class WifiCallbackApi {
   }
 }
 
-class BatteryApi {
-  Future<BatteryResponse> call(BatteryRequest arg) async {
+class Api {
+  Future<WifiResponse> call(WifiRequest arg) async {
     final Map<dynamic, dynamic> requestMap = arg._toMap();
     const BasicMessageChannel<dynamic> channel =
-        BasicMessageChannel<dynamic>('dev.flutter.pigeon.BatteryApi.call', StandardMessageCodec());
+        BasicMessageChannel<dynamic>('dev.flutter.pigeon.Api.call', StandardMessageCodec());
     
     final Map<dynamic, dynamic> replyMap = await channel.send(requestMap);
-    if (replyMap == null) {
-      throw PlatformException(
-        code: 'channel-error',
-        message: 'Unable to establish connection on channel.',
-        details: null);
-    } else if (replyMap['error'] != null) {
-      final Map<dynamic, dynamic> error = replyMap['error'];
-      throw PlatformException(
-          code: error['code'],
-          message: error['message'],
-          details: error['details']);
-    } else {
-      return BatteryResponse._fromMap(replyMap['result']);
-    }
-    
-  }
-}
-
-class WifiApi {
-  Future<WifiResponse> call() async {
-    const BasicMessageChannel<dynamic> channel =
-        BasicMessageChannel<dynamic>('dev.flutter.pigeon.WifiApi.call', StandardMessageCodec());
-    
-    final Map<dynamic, dynamic> replyMap = await channel.send(null);
     if (replyMap == null) {
       throw PlatformException(
         code: 'channel-error',

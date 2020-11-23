@@ -8,36 +8,26 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @class FlutterWifiResponse;
-@class FlutterBatteryResponse;
-@class FlutterBatteryRequest;
+@class FlutterWifiRequest;
 
 @interface FlutterWifiResponse : NSObject
+@property(nonatomic, strong, nullable) NSNumber * availableDetect;
 @property(nonatomic, strong, nullable) NSNumber * availableWifi;
 @property(nonatomic, strong, nullable) NSNumber * availableMobile;
 @end
 
-@interface FlutterBatteryResponse : NSObject
-@property(nonatomic, copy, nullable) NSString * responseMessage;
+@interface FlutterWifiRequest : NSObject
+@property(nonatomic, strong, nullable) NSNumber * isDetect;
 @end
 
-@interface FlutterBatteryRequest : NSObject
-@property(nonatomic, copy, nullable) NSString * unit;
-@end
-
-@interface FlutterWifiCallbackApi : NSObject
+@interface FlutterCallbackApi : NSObject
 - (instancetype)initWithBinaryMessenger:(id<FlutterBinaryMessenger>)binaryMessenger;
 - (void)apply:(FlutterWifiResponse*)input completion:(void(^)(NSError* _Nullable))completion;
 @end
-@protocol FlutterBatteryApi
--(nullable FlutterBatteryResponse *)call:(FlutterBatteryRequest*)input error:(FlutterError *_Nullable *_Nonnull)error;
+@protocol FlutterApi
+-(nullable FlutterWifiResponse *)call:(FlutterWifiRequest*)input error:(FlutterError *_Nullable *_Nonnull)error;
 @end
 
-extern void FlutterBatteryApiSetup(id<FlutterBinaryMessenger> binaryMessenger, id<FlutterBatteryApi> _Nullable api);
-
-@protocol FlutterWifiApi
--(nullable FlutterWifiResponse *)call:(FlutterError *_Nullable *_Nonnull)error;
-@end
-
-extern void FlutterWifiApiSetup(id<FlutterBinaryMessenger> binaryMessenger, id<FlutterWifiApi> _Nullable api);
+extern void FlutterApiSetup(id<FlutterBinaryMessenger> binaryMessenger, id<FlutterApi> _Nullable api);
 
 NS_ASSUME_NONNULL_END
