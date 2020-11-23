@@ -12,7 +12,6 @@
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
 		8F8C1A5C25614A6800390F6E /* Pigeon.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F8C1A5B25614A6700390F6E /* Pigeon.m */; };
 		8FC0652F256B914E009F7425 /* WifiApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC0652E256B914E009F7425 /* WifiApi.swift */; };
-		8FC06531256B915D009F7425 /* BatteryApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC06530256B915D009F7425 /* BatteryApi.swift */; };
 		8FC06534256B91C5009F7425 /* Reachability in Frameworks */ = {isa = PBXBuildFile; productRef = 8FC06533256B91C5009F7425 /* Reachability */; };
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
@@ -42,7 +41,6 @@
 		8F8C1A5B25614A6700390F6E /* Pigeon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Pigeon.m; sourceTree = "<group>"; };
 		8FA606C4256A6A4A00A826FE /* Pigeon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Pigeon.h; sourceTree = "<group>"; };
 		8FC0652E256B914E009F7425 /* WifiApi.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WifiApi.swift; sourceTree = "<group>"; };
-		8FC06530256B915D009F7425 /* BatteryApi.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BatteryApi.swift; sourceTree = "<group>"; };
 		9740EEB21CF90195004384FC /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Debug.xcconfig; path = Flutter/Debug.xcconfig; sourceTree = "<group>"; };
 		9740EEB31CF90195004384FC /* Generated.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Generated.xcconfig; path = Flutter/Generated.xcconfig; sourceTree = "<group>"; };
 		97C146EE1CF9000F007C117D /* Runner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Runner.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -95,7 +93,6 @@
 		97C146F01CF9000F007C117D /* Runner */ = {
 			isa = PBXGroup;
 			children = (
-				8FC06530256B915D009F7425 /* BatteryApi.swift */,
 				8FC0652E256B914E009F7425 /* WifiApi.swift */,
 				8FA606C4256A6A4A00A826FE /* Pigeon.h */,
 				8F8C1A5B25614A6700390F6E /* Pigeon.m */,
@@ -223,7 +220,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8FC06531256B915D009F7425 /* BatteryApi.swift in Sources */,
 				8F8C1A5C25614A6800390F6E /* Pigeon.m in Sources */,
 				8FC0652F256B914E009F7425 /* WifiApi.swift in Sources */,
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,

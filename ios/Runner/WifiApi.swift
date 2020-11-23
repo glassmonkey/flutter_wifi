@@ -8,51 +8,58 @@
 import Foundation
 import Reachability
 
-class WifiApi: FlutterWifiApi {
-    
+class Api: FlutterApi {
+
+
     var isWifi = false
     var isMobile = false
-    
+
     let reachability = try! Reachability()
-    
-    func call(_ error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> FlutterWifiResponse? {
-        return self.fetchStatus()
+
+    let callback = FlutterCallbackApi()
+
+    func call(_ input: FlutterWifiRequest, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> FlutterWifiResponse? {
+
+        let isDetect = input.isDetect as! Bool
+
+        if isDetect {
+            subscribe()
+        } else {
+            self.reachability.stopNotifier()
+        }
+        return self.fetchStatus(isDetect)
     }
-    
-    init() {
-        
-        let callback = FlutterWifiCallbackApi()
-        
+
+
+
+    func subscribe() {
         reachability.whenReachable = { reachability in
+            print("update")
+            print(reachability.connection)
             switch reachability.connection {
             case .wifi:
                 self.isWifi = true
                 self.isMobile = false
             case .cellular:
-               self.isWifi = false
-               self.isMobile = true
+                self.isWifi = false
+                self.isMobile = true
             default:
-               self.isWifi = false
-               self.isMobile = false
+                self.isWifi = false
+                self.isMobile = false
             }
-            callback.apply(self.fetchStatus()) {
+            self.callback.apply(self.fetchStatus()) {
                 _ in
+                print("callback??")
             }
         }
-        
-        reachability.whenUnreachable = { _ in
-           callback.apply(self.fetchStatus()) {
-                           _ in
-                       }
-        }
-        
         try! self.reachability.startNotifier()
     }
-    
-    func fetchStatus() -> FlutterWifiResponse {
+
+    func fetchStatus(_ isDetect: Bool = true) -> FlutterWifiResponse {
         let response = FlutterWifiResponse()
         response.availableMobile = isMobile as NSNumber
         response.availableWifi = isWifi as NSNumber
+        response.availableDetect = isDetect as NSNumber
         return response
     }
 }

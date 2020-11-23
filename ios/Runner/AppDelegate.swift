@@ -9,8 +9,7 @@ import Flutter
 
         let controller: FlutterViewController = window?.rootViewController as! FlutterViewController
 
-        FlutterBatteryApiSetup(controller.binaryMessenger, BatteryApi())
-        FlutterWifiApiSetup(controller.binaryMessenger, WifiApi())
+        FlutterApiSetup(controller.binaryMessenger, Api())
 
         GeneratedPluginRegistrant.register(with: self)
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
