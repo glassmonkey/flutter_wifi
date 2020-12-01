@@ -9,7 +9,7 @@ import Foundation
 import Reachability
 
 class Api: FlutterApi {
-    
+
     init(_ flutterBinaryMessenger: FlutterBinaryMessenger) {
         self.callbackApi = FlutterCallbackApi(binaryMessenger: flutterBinaryMessenger)
     }
@@ -17,7 +17,7 @@ class Api: FlutterApi {
 
     var isWifi = false
     var isMobile = false
-    
+
     let callbackApi: FlutterCallbackApi
 
     let reachability = try! Reachability()
@@ -51,7 +51,7 @@ class Api: FlutterApi {
             }
             DispatchQueue.main.async {
                 self.callbackApi.apply(self.fetchStatus(), completion: { (error: Error?) -> Void in
-                })
+                    })
             }
         }
         try! self.reachability.startNotifier()
