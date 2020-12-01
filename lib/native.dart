@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+
+import 'native/api.dart';
 
 class WifiView extends StatefulWidget {
   @override
@@ -10,38 +11,69 @@ class WifiView extends StatefulWidget {
 }
 
 class _WifiViewState extends State<WifiView> {
-  MethodChannel _platform;
+  String _wifiText;
 
-  String _batteryLevel;
+  bool _isSwitch;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    this._platform =
-        MethodChannel('nagano.shunsuke.flutter_wifi_sample/battery');
-    this._batteryLevel = "loading";
+    _wifiText = "loading";
+    _isSwitch = false;
+    CallbackApi.setup(CallbackApiImpl(this.changeConnection));
   }
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return Column(children: [
-      Text(_batteryLevel),
+      Text(_wifiText),
       RaisedButton(
-        child: Text('Get Battery Level'),
+        child: Text("Get Wifi Information"),
         onPressed: fetchData,
+        color: _isSwitch ? Colors.green : Colors.black12,
+        textColor: Colors.white,
       ),
     ]);
   }
 
   Future<void> fetchData() async {
-    try {
-      final int result = await _platform.invokeMethod('getBatteryLevel');
-      _batteryLevel = 'Battery level at $result % .';
-    } on PlatformException catch (e) {
-      _batteryLevel = "Failed to get battery level: '${e.message}'.";
-    }
-    setState(() {});
+    setState(() {
+      _isSwitch = !_isSwitch;
+    });
+    final api = Api();
+    final request = WifiRequest();
+    request.isDetect = _isSwitch;
+    this.changeConnection(await api.call(request));
+  }
+
+  void changeConnection(WifiResponse response) {
+    setState(() {
+      if (!response.availableDetect) {
+        _wifiText = "Stop Detection";
+        return;
+      }
+
+      if (response.availableWifi) {
+        _wifiText = "WIFI Connection";
+      } else if (response.availableMobile) {
+        _wifiText = "Mobile Connection";
+      } else {
+        _wifiText = "Lost Connection";
+      }
+    });
+  }
+}
+
+class CallbackApiImpl extends CallbackApi {
+  final Function(WifiResponse response) caller;
+
+  CallbackApiImpl(this.caller);
+
+  @override
+  void apply(WifiResponse response) {
+    print(response);
+    this.caller(response);
   }
 }
