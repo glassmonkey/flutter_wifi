@@ -73,6 +73,7 @@ class CallbackApiImpl extends CallbackApi {
 
   @override
   void apply(WifiResponse response) {
+    print(response);
     this.caller(response);
   }
 }

@@ -9,14 +9,18 @@ import Foundation
 import Reachability
 
 class Api: FlutterApi {
+    
+    init(_ callbackApi: FlutterCallbackApi) {
+        self.callbackApi = callbackApi
+    }
 
 
     var isWifi = false
     var isMobile = false
+    
+    let callbackApi: FlutterCallbackApi
 
     let reachability = try! Reachability()
-
-    let callback = FlutterCallbackApi()
 
     func call(_ input: FlutterWifiRequest, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> FlutterWifiResponse? {
 
@@ -47,19 +51,24 @@ class Api: FlutterApi {
                 self.isWifi = false
                 self.isMobile = false
             }
-            self.callback.apply(self.fetchStatus()) {
-                _ in
-                print("callback??")
+            DispatchQueue.main.async {
+                print("begin")
+                self.callbackApi.apply(self.fetchStatus(), completion: { (error: Error?) -> Void in
+                })
+                print("end")
             }
+            print("done")
         }
         try! self.reachability.startNotifier()
     }
 
     func fetchStatus(_ isDetect: Bool = true) -> FlutterWifiResponse {
         let response = FlutterWifiResponse()
-        response.availableMobile = isMobile as NSNumber
-        response.availableWifi = isWifi as NSNumber
+        response.availableMobile = self.isMobile as NSNumber
+        response.availableWifi = self.isWifi as NSNumber
         response.availableDetect = isDetect as NSNumber
+        print(response)
+        print(response.availableMobile, response.availableWifi, response.availableDetect)
         return response
     }
 }
