@@ -8,8 +8,7 @@ import Flutter
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
         let controller: FlutterViewController = window?.rootViewController as! FlutterViewController
-        let callbackApi = FlutterCallbackApi(binaryMessenger: controller.binaryMessenger)
-        FlutterApiSetup(controller.binaryMessenger, Api(callbackApi))
+        FlutterApiSetup(controller.binaryMessenger, Api(controller.binaryMessenger))
         GeneratedPluginRegistrant.register(with: self)
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     }

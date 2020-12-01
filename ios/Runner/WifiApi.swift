@@ -10,8 +10,8 @@ import Reachability
 
 class Api: FlutterApi {
     
-    init(_ callbackApi: FlutterCallbackApi) {
-        self.callbackApi = callbackApi
+    init(_ flutterBinaryMessenger: FlutterBinaryMessenger) {
+        self.callbackApi = FlutterCallbackApi(binaryMessenger: flutterBinaryMessenger)
     }
 
 
