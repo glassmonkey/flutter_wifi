@@ -38,8 +38,6 @@ class Api: FlutterApi {
 
     func subscribe() {
         reachability.whenReachable = { reachability in
-            print("update")
-            print(reachability.connection)
             switch reachability.connection {
             case .wifi:
                 self.isWifi = true
@@ -52,12 +50,9 @@ class Api: FlutterApi {
                 self.isMobile = false
             }
             DispatchQueue.main.async {
-                print("begin")
                 self.callbackApi.apply(self.fetchStatus(), completion: { (error: Error?) -> Void in
                 })
-                print("end")
             }
-            print("done")
         }
         try! self.reachability.startNotifier()
     }
@@ -67,8 +62,6 @@ class Api: FlutterApi {
         response.availableMobile = self.isMobile as NSNumber
         response.availableWifi = self.isWifi as NSNumber
         response.availableDetect = isDetect as NSNumber
-        print(response)
-        print(response.availableMobile, response.availableWifi, response.availableDetect)
         return response
     }
 }
